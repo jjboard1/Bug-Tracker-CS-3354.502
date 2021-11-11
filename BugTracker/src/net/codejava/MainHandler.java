@@ -3,12 +3,16 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Objects;
 
+
+//This class handles most of the events
 public class MainHandler
 {
-	private static final Scanner keyboard = new Scanner(System.in);
-	static ArrayList<profileObj> list = new ArrayList<profileObj>();
-	static profileObj currentProfile;
+	private static final Scanner keyboard = new Scanner(System.in); 	//This is used for user input.
+	static ArrayList<profileObj> list = new ArrayList<profileObj>();	//This is the list of profiles.
+	static profileObj currentProfile;									//This is the current profile.
 	
+	//This method lets the user create a new profile.
+	//The profile is added to the list of profiles.
 	public static void newProfile()
 	{
 		System.out.println("Enter name for new profile: ");
@@ -18,6 +22,8 @@ public class MainHandler
 		profileMenu();
 	}
 	
+	//This method lets the user create a new project.
+	//The project is added to the current profile.
 	public static void newList()
 	{
 		System.out.println("Enter name for new project: ");
@@ -27,6 +33,8 @@ public class MainHandler
 		viewProject();
 	}
 	
+	//This method lets the user set the current profile.
+	//It iterates through the list of profiles to find the match for the input and set the current profile to that.
 	public static void setProfile()
 	{
 		System.out.println("Enter name of profile to set:");
@@ -41,12 +49,17 @@ public class MainHandler
 		profileMenu();
 	}
 	
+	//This method displays the menu where users can interact with profiles.
 	public static void profileMenu()
 	{
+		//This if/else structure lets the menu display different things
+		//depending on if there are any profiles to display.
 		if(!list.isEmpty())
 		{
 			System.out.println("PROFILES [Current Profile in Braces]");
 			
+			//This for loop prints out all the profiles
+			//The current profile is surrounded with brackets [ ]
 			for(int i = 0; i < list.size(); i++)
 			{
 				if(Objects.equals(currentProfile.name, list.get(i).name))
@@ -61,6 +74,7 @@ public class MainHandler
 			
 			int input = inputHandler();
 			
+			//This switch case reads what the user inputed and calls the appropriate method or error message.
 			switch(input)
 			{
 				case 1: newProfile();
@@ -84,6 +98,7 @@ public class MainHandler
 			
 			int input = inputHandler();
 			
+			//This switch case reads what the user inputed and calls the appropriate method or error message.
 			switch(input)
 			{
 				case 1: newProfile();
@@ -99,6 +114,8 @@ public class MainHandler
 		}
 	}
 
+	//This entry lets the user input the data for a new entry
+	//It creates a new entryObj and adds it to the current project
 	public static void newEntry(listObj k)
 	{
 		System.out.println("Enter item ID:");
@@ -123,10 +140,12 @@ public class MainHandler
 		listMenu(k.name);
 	}
 	
+	//This method shows the inside of a project, listing the entries and options.
 	public static void listMenu(String z)
 	{	
 		int index = 0;
 		
+		//This for loop gets the index of the current project in the list of projects in the current profile.
 		for(int i = 0; i < currentProfile.list.size(); i++)
 		{
 			if(Objects.equals(currentProfile.list.get(i).name, z))
@@ -135,10 +154,13 @@ public class MainHandler
 			}
 		}
 		
+		//This if/else structure lets the menu display different things
+		//depending on if there are any entries to display.
 		if(!currentProfile.list.get(index).list.isEmpty())
 		{
 			System.out.println("Project Items: Descriptions");
 			
+			//This prints out the descriptions of the entries in the current project.
 			for(int i = 0; i < currentProfile.list.get(index).list.size(); i++)
 			{
 				System.out.println(" - " + currentProfile.list.get(index).list.get(i).desc);
@@ -150,6 +172,7 @@ public class MainHandler
 			
 			int given = inputHandler();
 			
+			//This switch case reads what the user inputed and calls the appropriate method or error message.
 			switch(given)
 			{
 				case 1: newEntry(currentProfile.list.get(index));
@@ -171,6 +194,7 @@ public class MainHandler
 			
 			int given = inputHandler();
 			
+			//This switch case reads what the user inputed and calls the appropriate method or error message.
 			switch(given)
 			{
 				case 1: newEntry(currentProfile.list.get(index));
@@ -185,12 +209,16 @@ public class MainHandler
 		
 	}
 	
+	//This method displays the menu where you can see the projects associated with a profile.
 	public static void viewProject()
 	{
+		//This if/else structure lets the menu display different things
+		//depending on if there are any projects to access.
 		if(!currentProfile.list.isEmpty())
 		{
 			System.out.println(currentProfile.name + " - PROJECTS");
 			
+			//This for loop prints out the profiles in a vertical list.
 			for(int i = 0; i < currentProfile.list.size(); i++)
 			{
 				System.out.println(" - " + currentProfile.list.get(i).name);
@@ -203,6 +231,7 @@ public class MainHandler
 			
 			int input = inputHandler();
 			
+			//This switch case reads what the user inputed and calls the appropriate method or error message.
 			switch(input)
 			{
 				case 1: newList();
@@ -220,7 +249,7 @@ public class MainHandler
 		}
 		else
 		{
-			System.out.println(currentProfile.name + " - PROJECTS");
+			System.out.println(currentProfile.name + " - PROJECTS"); //This prints the current profile name.
 			System.out.println("This profile has no projects");
 			System.out.println("1. Create New Project");
 			System.out.println("2. Back");
@@ -228,6 +257,7 @@ public class MainHandler
 			
 			int input = inputHandler();
 			
+			//This switch case reads what the user inputed and calls the appropriate method or error message.
 			switch(input)
 			{
 				case 1: newList();
@@ -241,6 +271,7 @@ public class MainHandler
 		}
 	}
 	
+	//This reads number inputs from the user and returns an integer, usually used for menu selection.
 	public static int inputHandler()
 	{	
 		String input = keyboard.nextLine();
@@ -252,6 +283,7 @@ public class MainHandler
 		return num;
 	}
 	
+	//This reads text input from the user and returns a string of what the user typed in.
 	public static String textInput()
 	{
 		String input = keyboard.nextLine();
@@ -261,6 +293,8 @@ public class MainHandler
 		return input;
 	}
 	
+	//This is the menu that displays when the program starts.
+	//The user has the option to look at profiles, create a new project, or open a project.
 	public static void mainMenu()
 	{
 		System.out.println("BUG TRACKER\n");
@@ -270,8 +304,9 @@ public class MainHandler
 		System.out.println("3. Current Projects");
 		System.out.println("Enter number to select: ");
 		
-		int input = inputHandler();
+		int input = inputHandler(); 	//This gets the user input.
 		
+		//This switch case reads what the user inputed and calls the appropriate method or error message.
 		switch(input)
 		{
 			case 1: profileMenu();
@@ -286,12 +321,13 @@ public class MainHandler
 		}
 	}
 
+	//This starts the program by calling the mainMenu method.
 	public static void main(String[] args)
 	{
-		profileObj x = new profileObj("default");
+		profileObj x = new profileObj("default"); // This creates a default profile.
 		
 		currentProfile = x;
-		list.add(x);
+		list.add(x);			//The default profile is added to the list of profiles.
 		
 		mainMenu();
 		
