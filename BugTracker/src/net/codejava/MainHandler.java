@@ -15,22 +15,64 @@ public class MainHandler
 	//The profile is added to the list of profiles.
 	public static void newProfile()
 	{
+		boolean check = false;
+		
 		System.out.println("Enter name for new profile: ");
 		String input = textInput();
-		profileObj a = new profileObj(input);
-		list.add(a);
-		profileMenu();
+		
+		//This for loop checks if the entered name is already in use.
+		for(int i = 0; i < list.size(); i++)
+		{
+			if(input.equals(list.get(i).name))
+			{
+				check = true;
+			}
+		}
+		
+		//If the name is in use, an error message is displayed. Otherwise, the profile is added
+		if(check)
+		{
+			System.out.println("ERROR: This profile name is already in use");
+			profileMenu();
+		}
+		else
+		{
+			profileObj a = new profileObj(input);
+			list.add(a);
+			profileMenu();
+		}
 	}
 	
 	//This method lets the user create a new project.
 	//The project is added to the current profile.
 	public static void newList()
 	{
+		boolean check = false;
+		
 		System.out.println("Enter name for new project: ");
 		String input = textInput();
-		listObj a = new listObj(input);
-		currentProfile.addList(a);
-		viewProject();
+		
+		//This for loop checks if the entered name is already in use.
+		for(int i = 0; i < currentProfile.list.size(); i++)
+		{
+			if(input.equals(currentProfile.list.get(i).name))
+			{
+				check = true;
+			}
+		}
+		
+		//If the name is in use, an error message is displayed. Otherwise, the project is added
+		if(check)
+		{
+			System.out.println("ERROR: This project name is already in use");
+			viewProject();
+		}
+		else
+		{
+			listObj a = new listObj(input);
+			currentProfile.addList(a);
+			viewProject();
+		}
 	}
 	
 	//This method lets the user set the current profile.
@@ -39,11 +81,27 @@ public class MainHandler
 	{
 		System.out.println("Enter name of profile to set:");
 		String input = textInput();
+		boolean check = false;
+		String name = currentProfile.name;
 		
 		for(int i = 0; i < list.size(); i++)
 		{
 			if(Objects.equals(input, list.get(i).name))
-			currentProfile = list.get(i);
+			{
+				currentProfile = list.get(i);
+				check = true;
+			}
+		}
+		
+		if(input.equals(name))
+		{
+			System.out.println("Input matches current profile, profile not changed");
+		}
+		
+		//If the entered name does not exist, an error message is displayed.
+		if(!check)
+		{
+			System.out.println("ERROR: No such profile exists, profile not changed");
 		}
 		
 		profileMenu();
@@ -118,20 +176,28 @@ public class MainHandler
 	//It creates a new entryObj and adds it to the current project
 	public static void newEntry(listObj k)
 	{
+		int id;
+		String desu;
+		String due;
+		String est;
+		String tag;
+		
+		//do {
 		System.out.println("Enter item ID:");
-		int id = inputHandler();
+		id = inputHandler();
+		//}while()
 		
 		System.out.println("Enter item description:");
-		String desu = textInput();
+		desu = textInput();
 		
 		System.out.println("Enter item due date:");
-		String due = textInput();
+		due = textInput();
 		
 		System.out.println("Enter estimate of time to completion:");
-		String est = textInput();
+		est = textInput();
 		
 		System.out.println("Enter item tag:");
-		String tag = textInput();
+		tag = textInput();
 		
 		entryObj w = new entryObj(id, desu, due, est, tag);
 		
@@ -144,6 +210,7 @@ public class MainHandler
 	public static void listMenu(String z)
 	{	
 		int index = 0;
+		boolean check = false;
 		
 		//This for loop gets the index of the current project in the list of projects in the current profile.
 		for(int i = 0; i < currentProfile.list.size(); i++)
@@ -151,7 +218,14 @@ public class MainHandler
 			if(Objects.equals(currentProfile.list.get(i).name, z))
 			{
 				index = i;
+				check = true;
 			}
+		}
+		
+		if(!check)
+		{
+			System.out.println("ERROR: No such project exists");
+			viewProject();
 		}
 		
 		//This if/else structure lets the menu display different things
@@ -180,7 +254,7 @@ public class MainHandler
 				case 2: viewProject();
 						break;
 				default: System.out.println("ERROR: Not a valid input");
-						profileMenu();
+						listMenu(z);
 						break;
 			}
 		}
@@ -202,7 +276,7 @@ public class MainHandler
 				case 2: viewProject();
 						break;
 				default: System.out.println("ERROR: Not a valid input");
-						profileMenu();
+						listMenu(z);
 						break;
 			}
 		}
@@ -243,7 +317,7 @@ public class MainHandler
 				case 3: mainMenu();
 						break;
 				default: System.out.println("ERROR: Not a valid input");
-						profileMenu();
+						viewProject();
 						break;
 			}
 		}
@@ -265,7 +339,7 @@ public class MainHandler
 				case 2: mainMenu();
 						break;
 				default: System.out.println("ERROR: Not a valid input");
-						profileMenu();
+						viewProject();
 						break;
 			}
 		}
@@ -276,11 +350,29 @@ public class MainHandler
 	{	
 		String input = keyboard.nextLine();
 		
-		int num = Integer.parseInt(input);
+		int num;
 		
-		System.out.println("");
+		if(isNum(input))
+		{
+			num = Integer.parseInt(input);
+		
+			System.out.println("");
+		
+			return num;
+		}
+		else
+		{
+			System.out.println("ERROR: You must input an integer");
+			num = inputHandler();
+		}
 		
 		return num;
+	}
+	
+	//Checks if a string is numeric
+	public static boolean isNum(String str)
+	{
+		  return str.matches("-?\\d+(\\.\\d+)?");
 	}
 	
 	//This reads text input from the user and returns a string of what the user typed in.
